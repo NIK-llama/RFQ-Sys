@@ -1,0 +1,19 @@
+{
+  "name": "rfq-british-auction",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "build:frontend": "pnpm --filter frontend build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "backend:dev": "cd apps/backend && uv run uvicorn app.main:app --reload --port 8000",
+    "backend:seed": "cd apps/backend && uv run python seed.py",
+    "backend:test": "cd apps/backend && uv run pytest"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.4"
+  },
+  "packageManager": "pnpm@11.24.0"
+}

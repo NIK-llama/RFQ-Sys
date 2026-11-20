@@ -1,11 +1,12 @@
 import uuid
-from datetime import datetime, date
+from datetime import date, datetime
 from decimal import Decimal
-from typing import List, Optional
+
 from pydantic import BaseModel, Field, model_validator
-from app.models.rfq import RFQStatus, ExtensionTriggerType
-from app.schemas.quote import QuoteResponse
+
+from app.models.rfq import ExtensionTriggerType, RFQStatus
 from app.schemas.activity_log import ActivityLogResponse
+from app.schemas.quote import QuoteResponse
 
 
 class RFQBase(BaseModel):
@@ -45,12 +46,12 @@ class RFQResponse(BaseModel):
     trigger_window_minutes: int
     extension_duration_minutes: int
     extension_trigger_type: ExtensionTriggerType
-    
-    current_lowest_bid: Optional[Decimal] = None
-    current_lowest_carrier: Optional[str] = None
+
+    current_lowest_bid: Decimal | None = None
+    current_lowest_carrier: str | None = None
     total_bids_count: int = 0
     is_in_trigger_window: bool = False
-    
+
     created_at: datetime
     updated_at: datetime
 
@@ -58,5 +59,5 @@ class RFQResponse(BaseModel):
 
 
 class RFQDetailResponse(RFQResponse):
-    quotes: List[QuoteResponse] = []
-    activity_logs: List[ActivityLogResponse] = []
+    quotes: list[QuoteResponse] = []
+    activity_logs: list[ActivityLogResponse] = []

@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+
 from app.config import settings
 
 engine = create_engine(
@@ -22,5 +23,6 @@ def get_db():
 
 
 def init_db():
-    from app.models import rfq, quote, activity_log  # noqa: F401
+    from app.models import activity_log, quote, rfq  # noqa: F401
+
     Base.metadata.create_all(bind=engine)

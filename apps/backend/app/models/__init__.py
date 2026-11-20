@@ -1,6 +1,6 @@
-from app.models.rfq import RFQ, RFQStatus, ExtensionTriggerType
+from app.models.activity_log import ActivityType, AuctionActivityLog
 from app.models.quote import Quote
-from app.models.activity_log import AuctionActivityLog, ActivityType
+from app.models.rfq import RFQ, ExtensionTriggerType, RFQStatus
 
 __all__ = [
     "RFQ",

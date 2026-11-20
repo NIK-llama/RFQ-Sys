@@ -1,8 +1,8 @@
 import uuid
-from datetime import datetime, date
+from datetime import date, datetime
 from decimal import Decimal
-from typing import Optional
-from pydantic import BaseModel, Field, field_validator
+
+from pydantic import BaseModel, Field
 
 
 class QuoteBase(BaseModel):
@@ -16,7 +16,7 @@ class QuoteBase(BaseModel):
 
 class QuoteCreate(QuoteBase):
     # Optional field to simulate submission time for automated testing / demo evaluation
-    simulated_submitted_at: Optional[datetime] = None
+    simulated_submitted_at: datetime | None = None
 
 
 class QuoteResponse(QuoteBase):
@@ -24,7 +24,7 @@ class QuoteResponse(QuoteBase):
     rfq_id: uuid.UUID
     total_price: Decimal
     submitted_at: datetime
-    rank: Optional[str] = None  # e.g., "L1", "L2"
-    rank_number: Optional[int] = None  # e.g., 1, 2
+    rank: str | None = None  # e.g., "L1", "L2"
+    rank_number: int | None = None  # e.g., 1, 2
 
     model_config = {"from_attributes": True}

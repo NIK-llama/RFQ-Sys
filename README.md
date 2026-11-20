@@ -158,7 +158,7 @@ docker compose up -d
 cd apps/backend
 uv sync
 uv run python seed.py     # Seeds realistic demo auctions
-uv run uvicorn app.main:app --reload --port 8000
+uv run fastapi dev        # Runs FastAPI standard dev server with auto-reload
 ```
 *API is live at [http://localhost:8000](http://localhost:8000) and Swagger docs at [http://localhost:8000/docs](http://localhost:8000/docs).*
 

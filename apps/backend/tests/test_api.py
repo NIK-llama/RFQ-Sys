@@ -1,13 +1,11 @@
-from datetime import datetime, timezone, timedelta, date
-from decimal import Decimal
-import pytest
+from datetime import UTC, datetime, timedelta
+
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from sqlalchemy.pool import StaticPool
+
 from app.database import Base, get_db
-from app.models import rfq as _m1, quote as _m2, activity_log as _m3
 from app.main import app
 
 engine = create_engine(
@@ -17,8 +15,6 @@ engine = create_engine(
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)
-
-
 
 
 def override_get_db():
@@ -40,7 +36,7 @@ def test_api_root():
 
 
 def test_create_and_query_rfq():
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     payload = {
         "reference_id": "API-RFQ-001",
         "name": "Ocean Freight Express",
@@ -50,7 +46,7 @@ def test_create_and_query_rfq():
         "pickup_service_date": "2026-12-10",
         "trigger_window_minutes": 10,
         "extension_duration_minutes": 5,
-        "extension_trigger_type": "BID_RECEIVED"
+        "extension_trigger_type": "BID_RECEIVED",
     }
 
     create_res = client.post("/api/rfqs", json=payload)
@@ -67,7 +63,7 @@ def test_create_and_query_rfq():
         "origin_charges": 200.00,
         "destination_charges": 250.00,
         "transit_time_days": 18,
-        "validity_date": "2026-12-30"
+        "validity_date": "2026-12-30",
     }
     quote_res = client.post(f"/api/rfqs/{rfq_id}/quotes", json=quote_payload)
     assert quote_res.status_code == 201

@@ -1,16 +1,15 @@
-import pytest
-from datetime import datetime, timezone, timedelta, date
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
+
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from fastapi import HTTPException
 
 from app.database import Base
-from app.models.rfq import RFQ, RFQStatus, ExtensionTriggerType
 from app.models.quote import Quote
-from app.models.activity_log import AuctionActivityLog, ActivityType
-from app.schemas.rfq import RFQCreate
+from app.models.rfq import ExtensionTriggerType
 from app.schemas.quote import QuoteCreate
+from app.schemas.rfq import RFQCreate
 from app.services.auction_service import AuctionService
 
 
@@ -26,7 +25,7 @@ def test_db():
 
 
 def test_create_rfq_validations():
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     # Invalid: close <= start
     with pytest.raises(ValueError, match="Bid Close Time must be later than Bid Start Time"):
         RFQCreate(
@@ -38,11 +37,13 @@ def test_create_rfq_validations():
             pickup_service_date=date(2026, 12, 1),
             trigger_window_minutes=10,
             extension_duration_minutes=5,
-            extension_trigger_type=ExtensionTriggerType.BID_RECEIVED
+            extension_trigger_type=ExtensionTriggerType.BID_RECEIVED,
         )
 
     # Invalid: forced_close <= close
-    with pytest.raises(ValueError, match="Forced Bid Close Time must always be greater than Bid Close Time"):
+    with pytest.raises(
+        ValueError, match="Forced Bid Close Time must always be greater than Bid Close Time"
+    ):
         RFQCreate(
             reference_id="TEST-002",
             name="Test RFQ",
@@ -52,12 +53,12 @@ def test_create_rfq_validations():
             pickup_service_date=date(2026, 12, 1),
             trigger_window_minutes=10,
             extension_duration_minutes=5,
-            extension_trigger_type=ExtensionTriggerType.BID_RECEIVED
+            extension_trigger_type=ExtensionTriggerType.BID_RECEIVED,
         )
 
 
 def test_bid_received_trigger_extends_auction(test_db):
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rfq_payload = RFQCreate(
         reference_id="TEST-BID-TRIGGER",
         name="Test Bid Trigger",
@@ -67,7 +68,7 @@ def test_bid_received_trigger_extends_auction(test_db):
         pickup_service_date=date(2026, 12, 1),
         trigger_window_minutes=10,  # inside 10 min window!
         extension_duration_minutes=5,
-        extension_trigger_type=ExtensionTriggerType.BID_RECEIVED
+        extension_trigger_type=ExtensionTriggerType.BID_RECEIVED,
     )
     rfq = AuctionService.create_rfq(test_db, rfq_payload)
     initial_close = rfq.bid_close_time
@@ -80,7 +81,7 @@ def test_bid_received_trigger_extends_auction(test_db):
         destination_charges=Decimal("100.00"),
         transit_time_days=2,
         validity_date=date(2026, 12, 15),
-        simulated_submitted_at=now
+        simulated_submitted_at=now,
     )
 
     quote, extended, reason = AuctionService.submit_quote(test_db, rfq.id, quote_payload)
@@ -90,7 +91,7 @@ def test_bid_received_trigger_extends_auction(test_db):
 
 
 def test_l1_rank_change_trigger(test_db):
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rfq_payload = RFQCreate(
         reference_id="TEST-L1-TRIGGER",
         name="Test L1 Trigger",
@@ -100,7 +101,7 @@ def test_l1_rank_change_trigger(test_db):
         pickup_service_date=date(2026, 12, 1),
         trigger_window_minutes=10,
         extension_duration_minutes=5,
-        extension_trigger_type=ExtensionTriggerType.L1_RANK_CHANGE
+        extension_trigger_type=ExtensionTriggerType.L1_RANK_CHANGE,
     )
     rfq = AuctionService.create_rfq(test_db, rfq_payload)
     initial_close = rfq.bid_close_time
@@ -115,7 +116,7 @@ def test_l1_rank_change_trigger(test_db):
         total_price=Decimal("2200.00"),
         transit_time_days=3,
         validity_date=date(2026, 12, 15),
-        submitted_at=now - timedelta(minutes=20)
+        submitted_at=now - timedelta(minutes=20),
     )
     test_db.add(q1)
     test_db.commit()
@@ -128,7 +129,7 @@ def test_l1_rank_change_trigger(test_db):
         destination_charges=Decimal("100.00"),
         transit_time_days=3,
         validity_date=date(2026, 12, 15),
-        simulated_submitted_at=now
+        simulated_submitted_at=now,
     )
     _, extended, _ = AuctionService.submit_quote(test_db, rfq.id, q2_payload)
     assert extended is False
@@ -142,7 +143,7 @@ def test_l1_rank_change_trigger(test_db):
         destination_charges=Decimal("100.00"),
         transit_time_days=2,
         validity_date=date(2026, 12, 15),
-        simulated_submitted_at=now
+        simulated_submitted_at=now,
     )
     _, extended, reason = AuctionService.submit_quote(test_db, rfq.id, q3_payload)
     assert extended is True
@@ -151,7 +152,7 @@ def test_l1_rank_change_trigger(test_db):
 
 
 def test_extension_capped_at_forced_close_time(test_db):
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     # Bid close is 2 mins from now, Forced close is 4 mins from now.
     # Extension duration is 10 mins!
     # Expected: close time extends only by 2 mins up to forced close time.
@@ -164,7 +165,7 @@ def test_extension_capped_at_forced_close_time(test_db):
         pickup_service_date=date(2026, 12, 1),
         trigger_window_minutes=10,
         extension_duration_minutes=10,
-        extension_trigger_type=ExtensionTriggerType.BID_RECEIVED
+        extension_trigger_type=ExtensionTriggerType.BID_RECEIVED,
     )
     rfq = AuctionService.create_rfq(test_db, rfq_payload)
 
@@ -175,7 +176,7 @@ def test_extension_capped_at_forced_close_time(test_db):
         destination_charges=Decimal("100.00"),
         transit_time_days=2,
         validity_date=date(2026, 12, 15),
-        simulated_submitted_at=now
+        simulated_submitted_at=now,
     )
     _, extended, reason = AuctionService.submit_quote(test_db, rfq.id, q_payload)
     assert extended is True
@@ -190,7 +191,7 @@ def test_extension_capped_at_forced_close_time(test_db):
         destination_charges=Decimal("100.00"),
         transit_time_days=2,
         validity_date=date(2026, 12, 15),
-        simulated_submitted_at=now + timedelta(seconds=10)
+        simulated_submitted_at=now + timedelta(seconds=10),
     )
     _, extended_again, _ = AuctionService.submit_quote(test_db, rfq.id, q2_payload)
     assert extended_again is False

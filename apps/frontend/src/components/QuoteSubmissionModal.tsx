@@ -26,7 +26,7 @@ export function QuoteSubmissionModal({
   const [validityDate, setValidityDate] = useState(
     new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
   );
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<QuoteSubmissionResponse | null>(null);
@@ -81,17 +81,19 @@ export function QuoteSubmissionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+      <div className="bg-[#0f172a] rounded-2xl border border-slate-800 shadow-2xl max-w-lg w-full overflow-hidden text-slate-100">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/70">
           <div>
-            <h3 className="font-bold text-slate-900">Submit Supplier Quote</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Enter competitive charges to compete in this British auction.</p>
+            <h3 className="font-bold text-white">Submit Supplier Quote</h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Enter competitive charges (in ₹) to compete in this British reverse auction.
+            </p>
           </div>
           <button
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -104,14 +106,14 @@ export function QuoteSubmissionModal({
               <div
                 className={`p-4 rounded-xl border flex items-start gap-3 ${
                   result.auction_extended
-                    ? "bg-amber-50 border-amber-200 text-amber-900"
-                    : "bg-emerald-50 border-emerald-200 text-emerald-900"
+                    ? "bg-amber-950/40 border-amber-800/80 text-amber-200"
+                    : "bg-emerald-950/40 border-emerald-800/80 text-emerald-200"
                 }`}
               >
                 {result.auction_extended ? (
-                  <Sparkles className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
+                  <Sparkles className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
                 ) : (
-                  <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
                 )}
                 <div>
                   <h4 className="font-bold text-sm">
@@ -128,14 +130,14 @@ export function QuoteSubmissionModal({
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/60 text-xs space-y-1.5">
+              <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs space-y-1.5">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Carrier:</span>
-                  <span className="font-semibold text-slate-800">{result.quote.carrier_name}</span>
+                  <span className="text-slate-400">Carrier:</span>
+                  <span className="font-semibold text-white">{result.quote.carrier_name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Total Price:</span>
-                  <span className="font-bold text-slate-900 font-mono">
+                  <span className="text-slate-400">Total Price:</span>
+                  <span className="font-bold text-emerald-400 font-mono">
                     {formatCurrency(result.quote.total_price)}
                   </span>
                 </div>
@@ -144,7 +146,7 @@ export function QuoteSubmissionModal({
               <button
                 type="button"
                 onClick={handleResetAndClose}
-                className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition"
+                className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 shadow-sm transition"
               >
                 Done & View Leaderboard
               </button>
@@ -152,94 +154,108 @@ export function QuoteSubmissionModal({
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs flex items-center gap-2">
+                <div className="p-3 bg-rose-950/60 border border-rose-800 text-rose-300 rounded-xl text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Carrier Name</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Carrier / Supplier Name
+                </label>
                 <input
                   type="text"
-                  placeholder="e.g. DHL Global Forwarding"
+                  placeholder="e.g. Blue Dart Express, Delhivery, VRL Logistics"
                   value={carrierName}
                   onChange={(e) => setCarrierName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Freight ($)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">Freight (₹)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="35000"
+                    value={freightCharges}
+                    onChange={(e) =>
+                      setFreightCharges(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">Origin (₹)</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     placeholder="2500"
-                    value={freightCharges}
-                    onChange={(e) => setFreightCharges(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Origin ($)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="250"
                     value={originCharges}
-                    onChange={(e) => setOriginCharges(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setOriginCharges(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Destination ($)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">Destination (₹)</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
-                    placeholder="200"
+                    placeholder="2000"
                     value={destinationCharges}
-                    onChange={(e) => setDestinationCharges(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setDestinationCharges(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
               </div>
 
               {/* Total Computed Quote Banner */}
-              <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-600">Calculated Total Price:</span>
-                <span className="font-extrabold text-slate-900 font-mono text-base">
+              <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
+                <span className="font-semibold text-slate-400">Calculated Total Price:</span>
+                <span className="font-extrabold text-emerald-400 font-mono text-base">
                   {formatCurrency(totalPrice)}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Transit Time (Days)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Transit Time (Days)
+                  </label>
                   <input
                     type="number"
                     min="1"
                     placeholder="3"
                     value={transitTimeDays}
-                    onChange={(e) => setTransitTimeDays(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) =>
+                      setTransitTimeDays(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Validity Date</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Validity Date
+                  </label>
                   <input
                     type="date"
                     value={validityDate}
                     onChange={(e) => setValidityDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 text-sm rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -249,7 +265,7 @@ export function QuoteSubmissionModal({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 shadow-sm transition flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   {loading ? "Submitting..." : "Submit Quote"}

@@ -8,7 +8,6 @@ import { ExtensionTriggerType } from "@/types";
 import {
   Gavel,
   ArrowLeft,
-  Calendar,
   Clock,
   ShieldAlert,
   Sliders,
@@ -100,27 +99,27 @@ export default function CreateRFQPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         Back to Auctions Overview
       </Link>
 
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6 pb-6 border-b border-slate-100">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+      <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-xl shadow-black/30">
+        <div className="flex items-center gap-3 mb-6 pb-6 border-b border-slate-800">
+          <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/80 flex items-center justify-center text-blue-400">
             <Gavel className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-slate-900">Create New RFQ</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-xl font-extrabold text-white">Create New RFQ</h1>
+            <p className="text-xs text-slate-400 mt-0.5">
               Configure Request for Quotation with British Auction dynamic auto-extensions.
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs flex items-center gap-2">
+          <div className="mb-6 p-3.5 bg-rose-950/60 border border-rose-800 text-rose-300 rounded-xl text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -129,100 +128,100 @@ export default function CreateRFQPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Basic Information */}
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
               <span>1. General RFQ Details</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Reference ID
                 </label>
                 <input
                   type="text"
                   value={referenceId}
                   onChange={(e) => setReferenceId(e.target.value)}
-                  className="w-full px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50"
+                  className="w-full px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-950 text-blue-300"
                   required
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   RFQ Name / Title
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Heavy Machinery Shipment (Rotterdam -> Houston)"
+                  placeholder="e.g. Industrial Auto Freight (Chennai Auto Cluster -> Gurugram/NCR)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-950 text-slate-100 placeholder-slate-500"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Pickup / Service Date
               </label>
               <input
                 type="date"
                 value={pickupServiceDate}
                 onChange={(e) => setPickupServiceDate(e.target.value)}
-                className="w-full sm:w-1/2 px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:w-1/2 px-3 py-2 text-sm rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-950 text-slate-100"
                 required
               />
             </div>
           </div>
 
           {/* Section 2: Auction Schedule */}
-          <div className="pt-4 border-t border-slate-100 space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-600" />
+          <div className="pt-4 border-t border-slate-800 space-y-4">
+            <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-blue-400" />
               <span>2. Auction Bidding Timeline</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Bid Start Date & Time
                 </label>
                 <input
                   type="datetime-local"
                   value={bidStartTime}
                   onChange={(e) => setBidStartTime(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-950 text-slate-100"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Bid Close Date & Time
                 </label>
                 <input
                   type="datetime-local"
                   value={bidCloseTime}
                   onChange={(e) => setBidCloseTime(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-950 text-slate-100"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                  <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                  <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
                   Forced Close Date & Time
                 </label>
                 <input
                   type="datetime-local"
                   value={forcedBidCloseTime}
                   onChange={(e) => setForcedBidCloseTime(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500 bg-rose-50/30"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-rose-900 focus:outline-none focus:ring-2 focus:ring-rose-500 bg-rose-950/30 text-rose-200"
                   required
                 />
-                <p className="text-[10px] text-rose-600 mt-1">
+                <p className="text-[10px] text-rose-400 mt-1">
                   Must be later than Bid Close Time. Hard cutoff.
                 </p>
               </div>
@@ -230,20 +229,20 @@ export default function CreateRFQPage() {
           </div>
 
           {/* Section 3: British Auction Configuration */}
-          <div className="pt-4 border-t border-slate-100 space-y-4">
+          <div className="pt-4 border-t border-slate-800 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-indigo-400" />
                 <span>3. British Auction Configuration Options</span>
               </h3>
-              <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-semibold text-indigo-300 bg-indigo-950/80 border border-indigo-800/80 px-2 py-0.5 rounded-full">
                 Auto-Extension Rules
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Trigger Window (X Minutes)
                 </label>
                 <div className="relative">
@@ -252,18 +251,18 @@ export default function CreateRFQPage() {
                     min="1"
                     value={triggerWindowMinutes}
                     onChange={(e) => setTriggerWindowMinutes(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-950 text-slate-100"
                     required
                   />
-                  <span className="absolute right-3 top-2.5 text-xs text-slate-400">minutes</span>
+                  <span className="absolute right-3 top-2.5 text-xs text-slate-500">minutes</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-[11px] text-slate-400 mt-1">
                   Monitors bidding activity within this window before close time.
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Extension Duration (Y Minutes)
                 </label>
                 <div className="relative">
@@ -272,12 +271,12 @@ export default function CreateRFQPage() {
                     min="1"
                     value={extensionDurationMinutes}
                     onChange={(e) => setExtensionDurationMinutes(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-950 text-slate-100"
                     required
                   />
-                  <span className="absolute right-3 top-2.5 text-xs text-slate-400">minutes</span>
+                  <span className="absolute right-3 top-2.5 text-xs text-slate-500">minutes</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-[11px] text-slate-400 mt-1">
                   Extra time added to auction each time trigger condition occurs.
                 </p>
               </div>
@@ -285,7 +284,7 @@ export default function CreateRFQPage() {
 
             {/* Extension Trigger Options */}
             <div className="pt-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-2">
+              <label className="block text-xs font-semibold text-slate-300 mb-2">
                 Extension Trigger Condition:
               </label>
 
@@ -311,8 +310,8 @@ export default function CreateRFQPage() {
                     key={opt.id}
                     className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${
                       extensionTriggerType === opt.id
-                        ? "bg-indigo-50/70 border-indigo-400 shadow-sm"
-                        : "bg-white border-slate-200 hover:border-slate-300"
+                        ? "bg-indigo-950/40 border-indigo-500 shadow-sm"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
                     }`}
                   >
                     <input
@@ -321,11 +320,11 @@ export default function CreateRFQPage() {
                       value={opt.id}
                       checked={extensionTriggerType === opt.id}
                       onChange={() => setExtensionTriggerType(opt.id as ExtensionTriggerType)}
-                      className="mt-0.5 text-indigo-600 focus:ring-indigo-500"
+                      className="mt-0.5 text-indigo-500 focus:ring-indigo-500 bg-slate-900 border-slate-700"
                     />
                     <div>
-                      <span className="font-bold text-xs text-slate-900 block">{opt.title}</span>
-                      <span className="text-[11px] text-slate-500 block mt-0.5">{opt.desc}</span>
+                      <span className="font-bold text-xs text-slate-200 block">{opt.title}</span>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">{opt.desc}</span>
                     </div>
                   </label>
                 ))}
@@ -333,25 +332,25 @@ export default function CreateRFQPage() {
             </div>
 
             {/* Rule Callout */}
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div className="p-3 bg-amber-950/40 border border-amber-800/80 rounded-xl text-xs text-amber-200 flex items-start gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <span>
                 <strong>System Rule:</strong> The auction will continuously extend whenever the condition is met, but will <strong>never extend beyond the Forced Bid Close Time</strong>.
               </span>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
             <Link
               href="/"
-              className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition"
+              className="px-4 py-2.5 rounded-xl border border-slate-800 text-slate-400 font-semibold text-xs hover:bg-slate-800 hover:text-white transition"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 shadow-sm shadow-blue-600/30 transition disabled:opacity-50"
             >
               {loading ? "Creating..." : "Create RFQ"}
             </button>

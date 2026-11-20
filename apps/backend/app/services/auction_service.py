@@ -181,9 +181,9 @@ class AuctionService:
             quote_id=quote.id,
             activity_type=ActivityType.BID_SUBMITTED,
             description=(
-                f"Quote submitted by '{quote.carrier_name}' for ${total_price:,.2f} "
-                f"(Freight: ${quote.freight_charges:,.2f}, Origin: ${quote.origin_charges:,.2f}, "
-                f"Dest: ${quote.destination_charges:,.2f}). Current Rank: L{quote_rank_num}."
+                f"Quote submitted by '{quote.carrier_name}' for ₹{total_price:,.2f} "
+                f"(Freight: ₹{quote.freight_charges:,.2f}, Origin: ₹{quote.origin_charges:,.2f}, "
+                f"Dest: ₹{quote.destination_charges:,.2f}). Current Rank: L{quote_rank_num}."
             ),
             created_at=submission_time,
         )
@@ -223,7 +223,7 @@ class AuctionService:
                     should_extend = True
                     trigger_detail = (
                         f"Lowest bidder (L1) changed to '{new_l1_carrier}' "
-                        f"(${total_price:,.2f}) within last {rfq.trigger_window_minutes} minutes"
+                        f"(₹{total_price:,.2f}) within last {rfq.trigger_window_minutes} minutes"
                     )
 
             if should_extend:

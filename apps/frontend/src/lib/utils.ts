@@ -8,16 +8,17 @@ export function cn(...inputs: ClassValue[]) {
 export function formatCurrency(amount: number | string | null | undefined): string {
   if (amount === null || amount === undefined) return "—";
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
-    currency: "USD",
+    currency: "INR",
+    maximumFractionDigits: 2,
   }).format(num);
 }
 
 export function formatDateTime(isoString: string | null | undefined): string {
   if (!isoString) return "—";
   const date = new Date(isoString);
-  return date.toLocaleString("en-US", {
+  return date.toLocaleString("en-IN", {
     month: "short",
     day: "numeric",
     year: "numeric",

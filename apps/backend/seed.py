@@ -18,10 +18,11 @@ def seed_database():
         db.commit()
 
         now = datetime.now(UTC)
-        print(f"Seeding database at current time: {now.isoformat()}")
+        print(f"Seeding database with India-centric RFQs at: {now.isoformat()}")
 
         # -------------------------------------------------------------
         # RFQ 1: ACTIVE - CLOSING IN 4 MINUTES (IN TRIGGER WINDOW!)
+        # Chennai to Gurugram / Auto Components corridor
         # Trigger: L1_RANK_CHANGE, Window: 10 mins, Extension: 5 mins
         # -------------------------------------------------------------
         rfq1_start = now - timedelta(hours=1)
@@ -30,7 +31,7 @@ def seed_database():
 
         rfq1 = RFQ(
             reference_id="RFQ-2026-001",
-            name="Transcontinental Air Cargo (LAX -> FRA)",
+            name="Automotive Parts Freight (Chennai Auto Cluster -> Gurugram/NCR)",
             bid_start_time=rfq1_start,
             bid_close_time=rfq1_close,
             original_bid_close_time=now + timedelta(minutes=4),
@@ -47,7 +48,9 @@ def seed_database():
         log1_init = AuctionActivityLog(
             rfq_id=rfq1.id,
             activity_type=ActivityType.RFQ_CREATED,
-            description=f"RFQ '{rfq1.name}' opened with British Auction (L1 Rank Change trigger).",
+            description=(
+                f"RFQ '{rfq1.name}' opened with British Auction (L1 Rank Change trigger)."
+            ),
             created_at=rfq1_start,
         )
         db.add(log1_init)
@@ -55,23 +58,23 @@ def seed_database():
         # Quotes for RFQ 1
         q1_1 = Quote(
             rfq_id=rfq1.id,
-            carrier_name="Lufthansa Cargo",
-            freight_charges=Decimal("3800.00"),
-            origin_charges=Decimal("400.00"),
-            destination_charges=Decimal("350.00"),
-            total_price=Decimal("4550.00"),
-            transit_time_days=2,
+            carrier_name="Blue Dart Express",
+            freight_charges=Decimal("42000.00"),
+            origin_charges=Decimal("3500.00"),
+            destination_charges=Decimal("3000.00"),
+            total_price=Decimal("48500.00"),
+            transit_time_days=3,
             validity_date=date(2026, 12, 15),
             submitted_at=now - timedelta(minutes=35),
         )
         q1_2 = Quote(
             rfq_id=rfq1.id,
-            carrier_name="FedEx Logistics",
-            freight_charges=Decimal("3500.00"),
-            origin_charges=Decimal("350.00"),
-            destination_charges=Decimal("300.00"),
-            total_price=Decimal("4150.00"),
-            transit_time_days=3,
+            carrier_name="Delhivery Freight",
+            freight_charges=Decimal("38000.00"),
+            origin_charges=Decimal("3000.00"),
+            destination_charges=Decimal("2500.00"),
+            total_price=Decimal("43500.00"),
+            transit_time_days=2,
             validity_date=date(2026, 12, 20),
             submitted_at=now - timedelta(minutes=15),
         )
@@ -83,7 +86,7 @@ def seed_database():
                 rfq_id=rfq1.id,
                 quote_id=q1_1.id,
                 activity_type=ActivityType.BID_SUBMITTED,
-                description="Quote submitted by 'Lufthansa Cargo' for $4,550.00. Current Rank: L1.",
+                description="Quote submitted by 'Blue Dart Express' for ₹48,500.00. Rank: L1.",
                 created_at=q1_1.submitted_at,
             )
         )
@@ -92,13 +95,14 @@ def seed_database():
                 rfq_id=rfq1.id,
                 quote_id=q1_2.id,
                 activity_type=ActivityType.BID_SUBMITTED,
-                description="Quote submitted by 'FedEx Logistics' for $4,150.00. Current Rank: L1.",
+                description="Quote submitted by 'Delhivery Freight' for ₹43,500.00. Rank: L1.",
                 created_at=q1_2.submitted_at,
             )
         )
 
         # -------------------------------------------------------------
         # RFQ 2: ACTIVE - ANY BID RECEIVED EXTENDS
+        # Hyderabad Genome Valley to Mumbai JNPT Port
         # Trigger: BID_RECEIVED, Window: 15 mins, Extension: 10 mins
         # -------------------------------------------------------------
         rfq2_start = now - timedelta(hours=2)
@@ -107,7 +111,7 @@ def seed_database():
 
         rfq2 = RFQ(
             reference_id="RFQ-2026-002",
-            name="Intermodal Container Freight (Shanghai -> Rotterdam)",
+            name="Pharma Cold Chain Corridor (Hyderabad Genome Valley -> Mumbai JNPT)",
             bid_start_time=rfq2_start,
             bid_close_time=rfq2_close,
             original_bid_close_time=now + timedelta(minutes=12),
@@ -134,12 +138,12 @@ def seed_database():
 
         q2_1 = Quote(
             rfq_id=rfq2.id,
-            carrier_name="Maersk Line",
-            freight_charges=Decimal("2100.00"),
-            origin_charges=Decimal("250.00"),
-            destination_charges=Decimal("300.00"),
-            total_price=Decimal("2650.00"),
-            transit_time_days=24,
+            carrier_name="Gati KWE",
+            freight_charges=Decimal("28000.00"),
+            origin_charges=Decimal("2500.00"),
+            destination_charges=Decimal("2500.00"),
+            total_price=Decimal("33000.00"),
+            transit_time_days=2,
             validity_date=date(2026, 12, 25),
             submitted_at=now - timedelta(minutes=45),
         )
@@ -150,13 +154,14 @@ def seed_database():
                 rfq_id=rfq2.id,
                 quote_id=q2_1.id,
                 activity_type=ActivityType.BID_SUBMITTED,
-                description="Quote submitted by 'Maersk Line' for $2,650.00. Current Rank: L1.",
+                description="Quote submitted by 'Gati KWE' for ₹33,000.00. Current Rank: L1.",
                 created_at=q2_1.submitted_at,
             )
         )
 
         # -------------------------------------------------------------
         # RFQ 3: COMPLETED / CLOSED AUCTION
+        # Pune MIDC to Kolkata Haldia Port
         # -------------------------------------------------------------
         rfq3_start = now - timedelta(days=2)
         rfq3_close = now - timedelta(hours=3)
@@ -164,7 +169,7 @@ def seed_database():
 
         rfq3 = RFQ(
             reference_id="RFQ-2026-003",
-            name="Domestic Express Truckload (Chicago -> Dallas)",
+            name="Heavy Industrial Machinery (Pune MIDC -> Kolkata Haldia Port)",
             bid_start_time=rfq3_start,
             bid_close_time=rfq3_close,
             original_bid_close_time=rfq3_close - timedelta(minutes=10),
@@ -180,23 +185,23 @@ def seed_database():
 
         q3_1 = Quote(
             rfq_id=rfq3.id,
-            carrier_name="J.B. Hunt",
-            freight_charges=Decimal("1400.00"),
-            origin_charges=Decimal("150.00"),
-            destination_charges=Decimal("150.00"),
-            total_price=Decimal("1700.00"),
-            transit_time_days=2,
+            carrier_name="TCI Freight",
+            freight_charges=Decimal("85000.00"),
+            origin_charges=Decimal("6000.00"),
+            destination_charges=Decimal("5000.00"),
+            total_price=Decimal("96000.00"),
+            transit_time_days=4,
             validity_date=date(2026, 12, 5),
             submitted_at=now - timedelta(hours=4),
         )
         q3_2 = Quote(
             rfq_id=rfq3.id,
-            carrier_name="Schneider National",
-            freight_charges=Decimal("1250.00"),
-            origin_charges=Decimal("120.00"),
-            destination_charges=Decimal("130.00"),
-            total_price=Decimal("1500.00"),
-            transit_time_days=2,
+            carrier_name="VRL Logistics",
+            freight_charges=Decimal("78000.00"),
+            origin_charges=Decimal("5500.00"),
+            destination_charges=Decimal("4500.00"),
+            total_price=Decimal("88000.00"),
+            transit_time_days=4,
             validity_date=date(2026, 12, 5),
             submitted_at=now - timedelta(hours=3, minutes=8),
         )
@@ -219,7 +224,7 @@ def seed_database():
         )
 
         db.commit()
-        print("Successfully seeded 3 realistic RFQs with quotes and activity logs!")
+        print("Successfully seeded 3 realistic India-centric RFQs with quotes and activity logs!")
     finally:
         db.close()
 

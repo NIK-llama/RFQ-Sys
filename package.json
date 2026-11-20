@@ -4,13 +4,12 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "dev:frontend": "pnpm --filter frontend dev",
-    "build:frontend": "pnpm --filter frontend build",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "backend:dev": "cd apps/backend && uv run fastapi dev",
-    "backend:seed": "cd apps/backend && uv run python seed.py",
-    "backend:test": "cd apps/backend && uv run pytest"
+    "backend:seed": "pnpm --filter backend seed",
+    "backend:test": "pnpm --filter backend test",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev"
   },
   "devDependencies": {
     "turbo": "^2.4.4"
